@@ -8,67 +8,86 @@
 <meta name="apple-mobile-web-app-title" content="EMS Director">
 <title>EMS Medical Director Time Tracker</title>
 <style>
+:root {
+  --bg: #0d1117;
+  --surface: #161b22;
+  --surface2: #1c2330;
+  --border: #2a3444;
+  --teal: #2dd4bf;
+  --teal-dark: #14b8a6;
+  --teal-dim: #1a7a71;
+  --gold: #f97316;
+  --text: #e6edf3;
+  --text-muted: #7d8fa3;
+  --text-dim: #4a5568;
+  --red: #f87171;
+  --red-bg: #2d1515;
+  --green: #34d399;
+}
 * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
-body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #f0f4f8; color: #1a2332; min-height: 100vh; }
-header { background: #1a3a5c; color: white; padding: 16px 20px; }
-header h1 { font-size: 1.05rem; font-weight: 700; }
-header p { font-size: 0.75rem; opacity: 0.7; margin-top: 2px; }
-.tabs { display: flex; background: #fff; border-bottom: 2px solid #e2e8f0; overflow-x: auto; }
-.tab { padding: 14px 18px; cursor: pointer; font-size: 0.85rem; font-weight: 500; border-bottom: 3px solid transparent; margin-bottom: -2px; color: #64748b; white-space: nowrap; transition: all 0.2s; }
-.tab.active { color: #1a3a5c; border-bottom-color: #1a3a5c; }
+body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+header { background: linear-gradient(135deg, #0d1f35 0%, #0a1628 100%); border-bottom: 2px solid var(--teal); padding: 16px 20px; display: flex; align-items: center; gap: 14px; }
+.header-badge { width: 42px; height: 42px; background: linear-gradient(135deg, #f97316, #ea580c); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.3rem; flex-shrink: 0; box-shadow: 0 0 14px rgba(249,115,22,0.45); color: white; font-weight: 900; }
+header h1 { font-size: 1.05rem; font-weight: 700; color: var(--text); }
+header p { font-size: 0.73rem; color: var(--teal); margin-top: 2px; }
+.tabs { display: flex; background: var(--surface); border-bottom: 1px solid var(--border); overflow-x: auto; }
+.tab { padding: 13px 18px; cursor: pointer; font-size: 0.85rem; font-weight: 500; border-bottom: 3px solid transparent; margin-bottom: -1px; color: var(--text-muted); white-space: nowrap; transition: all 0.2s; }
+.tab.active { color: var(--teal); border-bottom-color: var(--teal); }
+.tab:hover:not(.active) { color: var(--text); }
 .content { padding: 16px; max-width: 900px; margin: 0 auto; }
-.card { background: white; border-radius: 10px; padding: 20px; box-shadow: 0 1px 4px rgba(0,0,0,0.08); margin-bottom: 16px; }
-label { display: block; font-size: 0.75rem; font-weight: 600; color: #475569; margin-bottom: 5px; text-transform: uppercase; letter-spacing: 0.05em; }
-input, select, textarea { width: 100%; padding: 11px 12px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 1rem; color: #1a2332; background: #fff; -webkit-appearance: none; appearance: none; }
-input:focus, select:focus, textarea:focus { outline: none; border-color: #1a3a5c; }
+.card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 20px; margin-bottom: 16px; }
+label { display: block; font-size: 0.72rem; font-weight: 600; color: var(--teal); margin-bottom: 5px; text-transform: uppercase; letter-spacing: 0.07em; }
+input, select, textarea { width: 100%; padding: 11px 12px; border: 1px solid var(--border); border-radius: 8px; font-size: 1rem; color: var(--text); background: var(--surface2); -webkit-appearance: none; appearance: none; transition: border 0.2s; }
+input:focus, select:focus, textarea:focus { outline: none; border-color: var(--teal); box-shadow: 0 0 0 2px rgba(45,212,191,0.15); }
+select option { background: var(--surface2); color: var(--text); }
 textarea { resize: vertical; min-height: 80px; font-size: 0.9rem; }
 .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 14px; }
 .form-group { margin-bottom: 14px; }
 .btn { padding: 12px 20px; border-radius: 8px; border: none; font-size: 0.9rem; font-weight: 600; cursor: pointer; transition: all 0.15s; display: inline-flex; align-items: center; justify-content: center; gap: 6px; -webkit-appearance: none; }
-.btn-primary { background: #1a3a5c; color: white; width: 100%; }
-.btn-primary:active { background: #0f2640; }
-.btn-danger { background: #fee2e2; color: #dc2626; font-size: 0.75rem; padding: 6px 10px; }
-.btn-export { background: #0f766e; color: white; flex: 1; }
-.btn-pdf { background: #1e40af; color: white; flex: 1; }
+.btn-primary { background: linear-gradient(135deg, var(--teal) 0%, var(--teal-dark) 100%); color: #0d1117; width: 100%; font-weight: 700; box-shadow: 0 2px 12px rgba(45,212,191,0.3); }
+.btn-primary:active { opacity: 0.85; }
+.btn-danger { background: var(--red-bg); color: var(--red); border: 1px solid #5a2020; font-size: 0.75rem; padding: 6px 10px; }
+.btn-export { background: linear-gradient(135deg, #1a7a71 0%, #0f5c55 100%); color: white; flex: 1; border: 1px solid var(--teal-dim); }
+.btn-pdf { background: linear-gradient(135deg, #c2410c 0%, #9a3412 100%); color: white; flex: 1; border: 1px solid #ea580c; }
 .export-row { display: flex; gap: 10px; margin-top: 4px; }
-.progress-bar { height: 14px; background: #e2e8f0; border-radius: 99px; overflow: hidden; margin: 8px 0; }
+.progress-bar { height: 14px; background: var(--surface2); border-radius: 99px; overflow: hidden; margin: 8px 0; border: 1px solid var(--border); }
 .progress-fill { height: 100%; border-radius: 99px; transition: width 0.4s; }
-.progress-fill.ok { background: #16a34a; }
-.progress-fill.warn { background: #ea580c; }
-.progress-fill.over { background: #dc2626; }
-.progress-meta { display: flex; justify-content: space-between; font-size: 0.8rem; color: #64748b; }
+.progress-fill.ok { background: linear-gradient(90deg, var(--teal) 0%, var(--teal-dark) 100%); box-shadow: 0 0 8px rgba(45,212,191,0.4); }
+.progress-fill.warn { background: linear-gradient(90deg, #f97316 0%, #ea580c 100%); box-shadow: 0 0 8px rgba(249,115,22,0.4); }
+.progress-fill.over { background: linear-gradient(90deg, var(--red) 0%, #ef4444 100%); }
+.progress-meta { display: flex; justify-content: space-between; font-size: 0.8rem; color: var(--text-muted); }
 .month-select-row { display: flex; gap: 12px; align-items: flex-end; margin-bottom: 14px; flex-wrap: wrap; }
 .month-select-row > div:first-child { flex: 1; min-width: 160px; }
 .entry-list { display: flex; flex-direction: column; gap: 8px; }
-.entry-item { display: flex; align-items: flex-start; gap: 10px; padding: 12px 14px; border: 1px solid #e2e8f0; border-radius: 8px; background: #f8fafc; }
-.entry-dot { width: 8px; height: 8px; border-radius: 50%; background: #1a3a5c; margin-top: 5px; flex-shrink: 0; }
+.entry-item { display: flex; align-items: flex-start; gap: 10px; padding: 12px 14px; border: 1px solid var(--border); border-radius: 8px; background: var(--surface2); }
+.entry-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--teal); margin-top: 5px; flex-shrink: 0; box-shadow: 0 0 6px rgba(45,212,191,0.5); }
 .entry-body { flex: 1; min-width: 0; }
 .entry-top { display: flex; justify-content: space-between; gap: 8px; }
-.entry-cat { font-size: 0.82rem; font-weight: 600; color: #1a3a5c; }
-.entry-hrs { font-size: 0.82rem; font-weight: 700; color: #0f766e; white-space: nowrap; }
-.entry-date { font-size: 0.73rem; color: #94a3b8; margin-top: 2px; }
-.entry-notes { font-size: 0.77rem; color: #64748b; margin-top: 3px; line-height: 1.4; }
-.empty-state { text-align: center; padding: 40px 20px; color: #94a3b8; font-size: 0.9rem; }
+.entry-cat { font-size: 0.82rem; font-weight: 600; color: var(--teal); }
+.entry-hrs { font-size: 0.82rem; font-weight: 700; color: var(--gold); white-space: nowrap; }
+.entry-date { font-size: 0.73rem; color: var(--text-dim); margin-top: 2px; }
+.entry-notes { font-size: 0.77rem; color: var(--text-muted); margin-top: 3px; line-height: 1.4; }
+.empty-state { text-align: center; padding: 40px 20px; color: var(--text-dim); font-size: 0.9rem; }
 .report-table { width: 100%; border-collapse: collapse; font-size: 0.8rem; margin-bottom: 14px; }
-.report-table th { background: #1a3a5c; color: white; padding: 8px 10px; text-align: left; font-weight: 600; }
+.report-table th { background: linear-gradient(135deg, #0d2a3d, #0a1f2e); color: var(--teal); padding: 9px 10px; text-align: left; font-weight: 600; border-bottom: 2px solid var(--teal); }
 .report-table th:last-child { text-align: right; white-space: nowrap; }
-.report-table td { padding: 6px 10px; border-bottom: 1px solid #e2e8f0; vertical-align: top; }
-.report-table tr.group-row td { font-weight: 700; background: #f1f5f9; color: #1a3a5c; }
-.report-table tr.sub-row td:first-child { padding-left: 20px; color: #475569; }
-.report-table tr.total-row td { font-weight: 700; background: #1a3a5c; color: white; }
+.report-table td { padding: 6px 10px; border-bottom: 1px solid var(--border); vertical-align: top; color: var(--text); }
+.report-table tr.group-row td { font-weight: 700; background: var(--surface2); color: var(--gold); }
+.report-table tr.sub-row td:first-child { padding-left: 20px; color: var(--text-muted); }
+.report-table tr.total-row td { font-weight: 700; background: linear-gradient(135deg, #0d2a3d, #0a1f2e); color: var(--teal); border-top: 2px solid var(--teal); }
 .report-table td:last-child { text-align: right; white-space: nowrap; }
-.notes-section { margin: 14px 0; padding: 12px 14px; background: #f8fafc; border-radius: 8px; border: 1px solid #e2e8f0; }
-.notes-section h4 { font-size: 0.73rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: #475569; margin-bottom: 8px; }
-.note-item { font-size: 0.79rem; color: #334155; margin-bottom: 5px; padding-left: 10px; border-left: 2px solid #cbd5e1; line-height: 1.4; }
-.sig-block { margin-top: 24px; padding-top: 14px; border-top: 2px solid #1a3a5c; font-size: 0.79rem; color: #334155; }
+.notes-section { margin: 14px 0; padding: 12px 14px; background: var(--surface2); border-radius: 8px; border: 1px solid var(--border); }
+.notes-section h4 { font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.07em; color: var(--teal); margin-bottom: 8px; }
+.note-item { font-size: 0.79rem; color: var(--text-muted); margin-bottom: 5px; padding-left: 10px; border-left: 2px solid var(--teal-dim); line-height: 1.4; }
+.sig-block { margin-top: 24px; padding-top: 14px; border-top: 2px solid var(--teal); font-size: 0.79rem; color: var(--text-muted); }
 .sig-grid { display: grid; grid-template-columns: 2fr 1fr; gap: 32px; margin-top: 18px; }
-.sig-line { border-top: 1px solid #64748b; padding-top: 4px; color: #64748b; font-size: 0.73rem; }
-.spinner { display: inline-block; width: 14px; height: 14px; border: 2px solid rgba(255,255,255,0.4); border-top-color: white; border-radius: 50%; animation: spin 0.7s linear infinite; }
+.sig-line { border-top: 1px solid var(--text-dim); padding-top: 4px; color: var(--text-dim); font-size: 0.73rem; }
+.spinner { display: inline-block; width: 14px; height: 14px; border: 2px solid rgba(13,17,23,0.4); border-top-color: #0d1117; border-radius: 50%; animation: spin 0.7s linear infinite; }
 @keyframes spin { to { transform: rotate(360deg); } }
-.status-bar { background: #fef9c3; border: 1px solid #fde047; border-radius: 8px; padding: 10px 14px; font-size: 0.8rem; color: #713f12; margin-bottom: 14px; display: none; }
+.status-bar { background: #2a2000; border: 1px solid #7a5010; border-radius: 8px; padding: 10px 14px; font-size: 0.8rem; color: var(--gold); margin-bottom: 14px; display: none; }
 .status-bar.show { display: block; }
-.status-bar.error { background: #fee2e2; border-color: #fca5a5; color: #7f1d1d; }
-.toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%); background: #16a34a; color: white; padding: 12px 22px; border-radius: 10px; font-size: 0.875rem; font-weight: 600; opacity: 0; transition: opacity 0.3s; pointer-events: none; z-index: 999; white-space: nowrap; }
+.status-bar.error { background: var(--red-bg); border-color: #5a2020; color: var(--red); }
+.toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%); background: var(--teal); color: #0d1117; padding: 12px 22px; border-radius: 10px; font-size: 0.875rem; font-weight: 700; opacity: 0; transition: opacity 0.3s; pointer-events: none; z-index: 999; white-space: nowrap; }
 .toast.show { opacity: 1; }
 @media (max-width: 480px) {
   .form-row { grid-template-columns: 1fr; }
@@ -95,7 +114,6 @@ textarea { resize: vertical; min-height: 80px; font-size: 0.9rem; }
 
 <div class="content">
 
-  <!-- LOG TAB -->
   <div id="tab-log">
     <div id="sync-status" class="status-bar"></div>
     <div class="card">
@@ -117,15 +135,17 @@ textarea { resize: vertical; min-height: 80px; font-size: 0.9rem; }
         <label>Notes / Activity Description</label>
         <textarea id="log-notes" placeholder="Describe specific activities, locations, incidents reviewed, training topics, etc."></textarea>
       </div>
-      <button class="btn btn-primary" id="log-btn" onclick="logEntry()">+ Log Entry</button>
+      <button class="btn btn-primary" id="log-btn" onclick="logEntry()" style="background:linear-gradient(135deg,#ea580c,#c2410c);box-shadow:0 2px 12px rgba(234,88,12,0.3);">+ Log Entry</button>
     </div>
     <div class="card">
       <label style="margin-bottom:10px">This Month's Progress (Target: 40 hrs)</label>
-      <div id="month-progress"><div class="progress-bar"><div class="progress-fill ok" style="width:0%"></div></div><div class="progress-meta"><span>Loading…</span></div></div>
+      <div id="month-progress">
+        <div class="progress-bar"><div class="progress-fill ok" style="width:0%"></div></div>
+        <div class="progress-meta"><span>Loading…</span></div>
+      </div>
     </div>
   </div>
 
-  <!-- ENTRIES TAB -->
   <div id="tab-entries" style="display:none">
     <div class="card">
       <div class="month-select-row">
@@ -138,7 +158,6 @@ textarea { resize: vertical; min-height: 80px; font-size: 0.9rem; }
     </div>
   </div>
 
-  <!-- REPORT TAB -->
   <div id="tab-report" style="display:none">
     <div class="card">
       <div class="month-select-row">
@@ -162,7 +181,6 @@ textarea { resize: vertical; min-height: 80px; font-size: 0.9rem; }
 <script>
 const API = "https://script.google.com/macros/s/AKfycbx3m457-kAq0aM_FN4pZ1SuN8jOSdZuaqFGYK4OwcSs1Kf8HzK9Otzt9to_g_yknsbK/exec";
 
-// ── SCHEDULE B-1 ──────────────────────────────────────────────────────────
 const SCHEDULE = [
   { num:"1", group:"1. Provide medical direction for EMD and Communications (general)", subs:[
     "1a. Medical Priority Reference System oversight and review",
@@ -202,7 +220,6 @@ SCHEDULE.forEach(s => {
   else ALL_CATS.push({ group: s.group, label: s.group });
 });
 
-// ── HOURS DROPDOWN ────────────────────────────────────────────────────────
 const hoursEl = document.getElementById('log-hours');
 for (let h = 0.25; h <= 12; h = Math.round((h + 0.25) * 100) / 100) {
   const o = document.createElement('option');
@@ -212,7 +229,6 @@ for (let h = 0.25; h <= 12; h = Math.round((h + 0.25) * 100) / 100) {
 }
 hoursEl.value = 1;
 
-// ── CATEGORY DROPDOWN ─────────────────────────────────────────────────────
 const catEl = document.getElementById('log-category');
 SCHEDULE.forEach(s => {
   if (s.subs.length) {
@@ -226,7 +242,6 @@ SCHEDULE.forEach(s => {
 
 document.getElementById('log-date').value = new Date().toISOString().slice(0, 10);
 
-// ── CACHE ─────────────────────────────────────────────────────────────────
 let _cache = null;
 let _loading = false;
 
@@ -257,7 +272,6 @@ async function apiDelete(id) {
   return r.json();
 }
 
-// ── HELPERS ───────────────────────────────────────────────────────────────
 const mk = d => String(d).slice(0, 7);
 const mlabel = k => { const [y,m] = k.split('-'); return new Date(y, m-1, 1).toLocaleDateString('en-US', { month:'long', year:'numeric' }); };
 function months(entries) {
@@ -274,21 +288,18 @@ function showStatus(msg, err = false) {
   if (!err) setTimeout(() => el.classList.remove('show'), 3000);
 }
 
-// ── LOG ENTRY ─────────────────────────────────────────────────────────────
 async function logEntry() {
   const date = document.getElementById('log-date').value;
   const hours = parseFloat(document.getElementById('log-hours').value);
   const category = document.getElementById('log-category').value;
   const notes = document.getElementById('log-notes').value.trim();
   if (!date || !category) { toast('Please fill date and category.', '#dc2626'); return; }
-
   const btn = document.getElementById('log-btn');
   btn.innerHTML = '<span class="spinner"></span> Saving…'; btn.disabled = true;
-
   const entry = { id: Date.now(), date, hours, category, notes };
   try {
     await apiPost(entry);
-    _cache = null; // invalidate cache
+    _cache = null;
     document.getElementById('log-notes').value = '';
     toast('✓ Entry saved to Google Sheets!');
     await renderProgress();
@@ -298,7 +309,6 @@ async function logEntry() {
   btn.innerHTML = '+ Log Entry'; btn.disabled = false;
 }
 
-// ── PROGRESS ──────────────────────────────────────────────────────────────
 async function renderProgress() {
   const entries = await fetchEntries();
   const cur = mk(new Date().toISOString());
@@ -310,7 +320,6 @@ async function renderProgress() {
     <div class="progress-meta"><span>${total.toFixed(2)} / 40.00 hrs this month</span><span>${pct.toFixed(0)}%</span></div>`;
 }
 
-// ── ENTRIES TAB ───────────────────────────────────────────────────────────
 async function renderEntries() {
   document.getElementById('entries-list').innerHTML = '<div class="empty-state">Loading…</div>';
   const entries = await fetchEntries();
@@ -322,7 +331,7 @@ async function renderEntries() {
   const list = document.getElementById('entries-list');
   if (!filt.length) { list.innerHTML = '<div class="empty-state">No entries for this month.</div>'; return; }
   const totalH = filt.reduce((s,e) => s + e.hours, 0);
-  list.innerHTML = `<div style="font-size:0.78rem;color:#64748b;margin-bottom:10px">${filt.length} entries · <strong>${totalH.toFixed(2)} hrs total</strong></div>
+  list.innerHTML = `<div style="font-size:0.78rem;color:var(--text-muted);margin-bottom:10px">${filt.length} entries · <strong style="color:var(--teal)">${totalH.toFixed(2)} hrs total</strong></div>
   <div class="entry-list">${filt.map(e => `
     <div class="entry-item">
       <div class="entry-dot"></div>
@@ -346,7 +355,6 @@ async function deleteEntry(id) {
   } catch(e) { toast('Delete failed. Try again.', '#dc2626'); }
 }
 
-// ── REPORT DATA ───────────────────────────────────────────────────────────
 async function getReportData(monthKey) {
   const entries = await fetchEntries();
   const filt = entries.filter(e => mk(e.date) === monthKey);
@@ -358,7 +366,6 @@ async function getReportData(monthKey) {
   return { hrs, totalHrs, withNotes };
 }
 
-// ── REPORT TAB ────────────────────────────────────────────────────────────
 async function renderReport() {
   document.getElementById('report-content').innerHTML = '<div class="empty-state">Loading…</div>';
   const entries = await fetchEntries();
@@ -376,23 +383,21 @@ function buildReportHTML(monthKey, hrs, totalHrs, withNotes) {
     if (s.subs.length) {
       const gTotal = s.subs.reduce((sum, sub) => sum + (hrs[sub] || 0), 0);
       return `<tr class="group-row"><td>${s.group}</td><td>${gTotal > 0 ? gTotal.toFixed(2) : '—'}</td></tr>`
-        + s.subs.map(sub => `<tr class="sub-row"><td>${sub}</td><td>${(hrs[sub]||0) > 0 ? (hrs[sub]).toFixed(2) : '—'}</td></tr>`).join('');
+        + s.subs.map(sub => `<tr class="sub-row"><td>${sub}</td><td>${(hrs[sub]||0)>0?(hrs[sub]).toFixed(2):'—'}</td></tr>`).join('');
     }
-    return `<tr class="group-row"><td>${s.group}</td><td>${(hrs[s.group]||0) > 0 ? (hrs[s.group]).toFixed(2) : '—'}</td></tr>`;
+    return `<tr class="group-row"><td>${s.group}</td><td>${(hrs[s.group]||0)>0?(hrs[s.group]).toFixed(2):'—'}</td></tr>`;
   }).join('');
-
   const notesHTML = withNotes.length ? `
     <div class="notes-section"><h4>Activity Notes</h4>
-      ${withNotes.map(e => `<div class="note-item"><strong>${new Date(String(e.date)+'T12:00:00').toLocaleDateString('en-US',{month:'short',day:'numeric'})} — ${e.category}:</strong> ${e.notes}</div>`).join('')}
+      ${withNotes.map(e => `<div class="note-item"><strong style="color:var(--text)">${new Date(String(e.date)+'T12:00:00').toLocaleDateString('en-US',{month:'short',day:'numeric'})} — ${e.category}:</strong> ${e.notes}</div>`).join('')}
     </div>` : '';
-
   return `
     <div style="margin-bottom:14px">
-      <div style="font-size:0.95rem;font-weight:700;color:#1a3a5c">UNION EMS MEDICAL DIRECTOR</div>
-      <div style="font-size:0.85rem;font-weight:600;color:#334155">SERVICE DOCUMENTATION REPORT</div>
-      <div style="font-size:0.78rem;color:#64748b;margin-top:6px;line-height:1.8">
-        <strong>Period:</strong> ${mfull}<br>
-        <strong>Name:</strong> Matthew Bidwell, MD, MPH
+      <div style="font-size:0.95rem;font-weight:700;color:var(--teal)">UNION EMS MEDICAL DIRECTOR</div>
+      <div style="font-size:0.85rem;font-weight:600;color:var(--text)">SERVICE DOCUMENTATION REPORT</div>
+      <div style="font-size:0.78rem;color:var(--text-muted);margin-top:6px;line-height:1.8">
+        <strong style="color:var(--text)">Period:</strong> ${mfull}<br>
+        <strong style="color:var(--text)">Name:</strong> Matthew Bidwell, MD, MPH
       </div>
     </div>
     <table class="report-table">
@@ -401,18 +406,17 @@ function buildReportHTML(monthKey, hrs, totalHrs, withNotes) {
     </table>
     ${notesHTML}
     <div class="sig-block">
-      <p style="font-size:0.77rem;color:#475569;margin-bottom:14px">I CERTIFY THAT THE ABOVE NUMBER OF HOURS IS AN ACCURATE REFLECTION OF THE TIME SPENT ON MY MEDICAL DIRECTOR DUTIES.</p>
+      <p style="font-size:0.77rem;margin-bottom:14px">I CERTIFY THAT THE ABOVE NUMBER OF HOURS IS AN ACCURATE REFLECTION OF THE TIME SPENT ON MY MEDICAL DIRECTOR DUTIES.</p>
       <div class="sig-grid">
         <div><div style="margin-bottom:22px"></div><div class="sig-line">Signature</div></div>
         <div><div style="margin-bottom:22px"></div><div class="sig-line">Date</div></div>
       </div>
-      <div style="margin-top:14px;font-size:0.73rem;color:#64748b;line-height:1.8">
+      <div style="margin-top:14px;font-size:0.73rem;color:var(--text-muted);line-height:1.8">
         Matthew Bidwell, MD, MPH<br>Union EMS Medical Director<br>Union County EMS · Monroe, NC
       </div>
     </div>`;
 }
 
-// ── PRINT ─────────────────────────────────────────────────────────────────
 async function printReport() {
   const cur = document.getElementById('report-month').value;
   const { hrs, totalHrs, withNotes } = await getReportData(cur);
@@ -420,17 +424,16 @@ async function printReport() {
   const rows = SCHEDULE.map(s => {
     if (s.subs.length) {
       const gTotal = s.subs.reduce((sum, sub) => sum + (hrs[sub] || 0), 0);
-      return `<tr style="background:#eef2f7"><td><b>${s.group}</b></td><td align="right"><b>${gTotal > 0 ? gTotal.toFixed(2) : '—'}</b></td></tr>`
+      return `<tr style="background:#eef2f7"><td><b>${s.group}</b></td><td align="right"><b>${gTotal>0?gTotal.toFixed(2):'—'}</b></td></tr>`
         + s.subs.map(sub => `<tr><td style="padding-left:20px">${sub}</td><td align="right">${(hrs[sub]||0)>0?(hrs[sub]).toFixed(2):'—'}</td></tr>`).join('');
     }
     return `<tr style="background:#eef2f7"><td><b>${s.group}</b></td><td align="right"><b>${(hrs[s.group]||0)>0?(hrs[s.group]).toFixed(2):'—'}</b></td></tr>`;
   }).join('');
   const notesHTML = withNotes.length ? `<p><b>Activity Notes</b></p>`
     + withNotes.map(e => `<p style="padding-left:12px;border-left:3px solid #ccc;margin:4px 0;font-size:9.5pt"><b>${new Date(String(e.date)+'T12:00:00').toLocaleDateString('en-US',{month:'short',day:'numeric'})} — ${e.category}:</b> ${e.notes}</p>`).join('') : '';
-
   const win = window.open('', '_blank');
   win.document.write(`<!DOCTYPE html><html><head><meta charset="utf-8"><title>Service Documentation Report</title>
-  <style>body{font-family:Arial,sans-serif;margin:0.75in;color:#111;font-size:11pt}table{width:100%;border-collapse:collapse;margin-bottom:12px}th{background:#1a3a5c;color:white;padding:7px 8px;text-align:left}th:last-child{text-align:right}td{padding:5px 8px;border-bottom:1px solid #ddd}td:last-child{text-align:right}h2{color:#1a3a5c;margin-bottom:2px}h3{color:#1a3a5c;margin-top:0;margin-bottom:10px}.sig-table td{border:none}.sig-line{border-top:1px solid #555;padding-top:3px;font-size:9pt;color:#555}@media print{body{margin:0.5in}}</style>
+  <style>body{font-family:Arial,sans-serif;margin:0.75in;color:#111;font-size:11pt}table{width:100%;border-collapse:collapse;margin-bottom:12px}th{background:#1a3a5c;color:white;padding:7px 8px;text-align:left}th:last-child{text-align:right}td{padding:5px 8px;border-bottom:1px solid #ddd}td:last-child{text-align:right}h2{color:#1a3a5c;margin-bottom:2px}h3{color:#1a3a5c;margin-top:0;margin-bottom:10px}.sig-line{border-top:1px solid #555;padding-top:3px;font-size:9pt;color:#555}@media print{body{margin:0.5in}}</style>
   </head><body>
   <h2>UNION EMS MEDICAL DIRECTOR</h2><h3>SERVICE DOCUMENTATION REPORT</h3>
   <p><b>Period:</b> ${mfull}</p><p><b>Name:</b> Matthew Bidwell, MD, MPH</p><br>
@@ -439,12 +442,11 @@ async function printReport() {
   ${notesHTML}<br>
   <p>I CERTIFY THAT THE ABOVE NUMBER OF HOURS IS AN ACCURATE REFLECTION OF THE TIME SPENT ON MY MEDICAL DIRECTOR DUTIES.</p>
   <br><br>
-  <table class="sig-table" style="width:100%"><tr>
-    <td style="width:60%" class="sig-line">Signature</td>
-    <td style="width:10px;border:none"></td>
-    <td class="sig-line">Date</td>
-  </tr></table>
-  <br>
+  <table style="width:100%;border-collapse:collapse"><tr>
+    <td style="width:60%;border:none;border-top:1px solid #555;padding-top:4px;font-size:9pt;color:#555">Signature</td>
+    <td style="width:20px;border:none"></td>
+    <td style="border:none;border-top:1px solid #555;padding-top:4px;font-size:9pt;color:#555">Date</td>
+  </tr></table><br>
   <p style="font-size:9pt;color:#555">Matthew Bidwell, MD, MPH</p>
   <p style="font-size:9pt;color:#555">Union EMS Medical Director</p>
   <p style="font-size:9pt;color:#555">Union County EMS &middot; Monroe, NC</p>
@@ -453,7 +455,6 @@ async function printReport() {
   setTimeout(() => win.print(), 400);
 }
 
-// ── WORD EXPORT ───────────────────────────────────────────────────────────
 async function exportWord() {
   const cur = document.getElementById('report-month').value;
   const { hrs, totalHrs, withNotes } = await getReportData(cur);
@@ -488,9 +489,9 @@ ${notesSection}
 <p>I CERTIFY THAT THE ABOVE NUMBER OF HOURS IS AN ACCURATE REFLECTION OF THE TIME SPENT ON MY MEDICAL DIRECTOR DUTIES.</p>
 <br><br><br>
 <table style="border:none;width:100%"><tr>
-  <td style="border:none;border-top:1px solid #333;width:60%">Signature</td>
+  <td style="border:none;border-top:1px solid #333;width:60%;padding-top:4px;font-size:9pt;color:#555">Signature</td>
   <td style="border:none;width:30px"></td>
-  <td style="border:none;border-top:1px solid #333">Date</td>
+  <td style="border:none;border-top:1px solid #333;padding-top:4px;font-size:9pt;color:#555">Date</td>
 </tr></table>
 <br>
 <p style="font-size:9pt;color:#555">Matthew Bidwell, MD, MPH</p>
@@ -505,7 +506,6 @@ ${notesSection}
   toast('✓ Word document downloaded!');
 }
 
-// ── TABS ──────────────────────────────────────────────────────────────────
 function showTab(name) {
   ['log','entries','report'].forEach(t => document.getElementById(`tab-${t}`).style.display = t === name ? '' : 'none');
   document.querySelectorAll('.tab').forEach((el,i) => el.classList.toggle('active', ['log','entries','report'][i] === name));
@@ -513,15 +513,13 @@ function showTab(name) {
   if (name === 'report') renderReport();
 }
 
-// ── TOAST ─────────────────────────────────────────────────────────────────
-function toast(msg, bg = '#16a34a') {
+function toast(msg, bg = '#2dd4bf') {
   const t = document.getElementById('toast');
   t.textContent = msg; t.style.background = bg;
   t.classList.add('show');
   setTimeout(() => t.classList.remove('show'), 2800);
 }
 
-// ── INIT ──────────────────────────────────────────────────────────────────
 renderProgress();
 </script>
 </body>
