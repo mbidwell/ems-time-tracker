@@ -6,6 +6,41 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="EMS Director">
+<link rel="apple-touch-icon" href="icon.png">
+<style id="icon-canvas-style"></style>
+<script>
+// Generate icon at load and set it
+(function() {
+  const c = document.createElement('canvas');
+  c.width = 180; c.height = 180;
+  const ctx = c.getContext('2d');
+  // Background
+  const bg = ctx.createLinearGradient(0,0,180,180);
+  bg.addColorStop(0, '#0d1f35'); bg.addColorStop(1, '#0a1628');
+  ctx.fillStyle = bg; ctx.beginPath();
+  ctx.roundRect(0,0,180,180,36); ctx.fill();
+  // Orange circle
+  const cg = ctx.createRadialGradient(90,90,10,90,90,72);
+  cg.addColorStop(0,'#f97316'); cg.addColorStop(1,'#c2410c');
+  ctx.fillStyle = cg; ctx.beginPath();
+  ctx.arc(90,90,68,0,Math.PI*2); ctx.fill();
+  // Teal cross
+  ctx.fillStyle = '#2dd4bf';
+  ctx.fillRect(72,38,36,104); // vertical
+  ctx.fillRect(38,72,104,36); // horizontal
+  // "EMS" text
+  ctx.fillStyle = 'white';
+  ctx.font = 'bold 22px Arial';
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.fillText('EMS', 90, 90);
+  // Set as apple touch icon
+  const url = c.toDataURL('image/png');
+  const link = document.createElement('link');
+  link.rel = 'apple-touch-icon'; link.href = url;
+  document.head.appendChild(link);
+})();
+</script>
 <title>EMS Medical Director Time Tracker</title>
 <style>
 :root {
