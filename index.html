@@ -480,7 +480,13 @@ function buildReportHTML(monthKey, hrs, totalHrs, withNotes) {
 
 async function printReport() {
   const cur = document.getElementById('report-month').value;
-  const { hrs, totalHrs, withNotes } = await getReportData(cur);
+  const entries = await fetchEntries();
+  const filt = entries.filter(e => mk(e.date) === cur);
+  const hrs = {};
+  ALL_CATS.forEach(c => hrs[c.label] = 0);
+  filt.forEach(e => { if (hrs[e.category] !== undefined) hrs[e.category] += e.hours; });
+  const totalHrs = filt.reduce((s,e) => s + e.hours, 0);
+  const withNotes = filt.filter(e => e.notes).sort((a,b) => String(a.date).localeCompare(String(b.date)));
   const mfull = mlabel(cur);
   const rows = SCHEDULE.map(s => {
     if (s.subs.length) {
@@ -518,7 +524,13 @@ async function printReport() {
 
 async function exportWord() {
   const cur = document.getElementById('report-month').value;
-  const { hrs, totalHrs, withNotes } = await getReportData(cur);
+  const entries = await fetchEntries();
+  const filt = entries.filter(e => mk(e.date) === cur);
+  const hrs = {};
+  ALL_CATS.forEach(c => hrs[c.label] = 0);
+  filt.forEach(e => { if (hrs[e.category] !== undefined) hrs[e.category] += e.hours; });
+  const totalHrs = filt.reduce((s,e) => s + e.hours, 0);
+  const withNotes = filt.filter(e => e.notes).sort((a,b) => String(a.date).localeCompare(String(b.date)));
   const mfull = mlabel(cur);
   let tableRows = `<tr style="background:#1a3a5c;color:white"><td><b>Description of Services (Schedule B-1)</b></td><td><b>Est. Hours for Period</b></td></tr>`;
   SCHEDULE.forEach(s => {
