@@ -388,14 +388,18 @@ async function renderEntries() {
   const totalH = filt.reduce((s,e) => s + e.hours, 0);
   list.innerHTML = `<div style="font-size:0.78rem;color:var(--text-muted);margin-bottom:10px">${filt.length} entries · <strong style="color:var(--teal)">${totalH.toFixed(2)} hrs total</strong></div>
   <div class="entry-list">${filt.map(e => `
-    <div class="entry-item">
+    <div class="entry-item" id="entry-${e.id}">
       <div class="entry-dot"></div>
       <div class="entry-body">
         <div class="entry-top"><span class="entry-cat">${e.category}</span><span class="entry-hrs">${e.hours} hrs</span></div>
         <div class="entry-date">${fmtDate(e.date)}</div>
-        ${e.notes ? `<div class="entry-notes">${e.notes}</div>` : ''}
+        ${e.notes ? `<div class="entry-notes" id="notes-${e.id}">${e.notes}</div>` : `<div class="entry-notes" id="notes-${e.id}"></div>`}
+        <div class="entry-actions"></div>
       </div>
-      <button class="btn btn-danger" onclick="deleteEntry('${e.id}')">✕</button>
+      <div style="display:flex;flex-direction:column;gap:20px;flex-shrink:0">
+        <button class="btn" style="background:var(--surface2);color:var(--teal);border:1px solid var(--border);font-size:0.72rem;padding:6px 10px" onclick="editEntry('${e.id}')">✏️</button>
+        <button class="btn btn-danger" onclick="deleteEntry('${e.id}')">✕</button>
+      </div>
     </div>`).join('')}</div>`;
 }
 
@@ -408,6 +412,35 @@ async function deleteEntry(id) {
     renderEntries();
     renderProgress();
   } catch(e) { toast('Delete failed. Try again.', '#dc2626'); }
+}
+
+function editEntry(id) {
+  const row = document.getElementById(`entry-${id}`);
+  const notesEl = document.getElementById(`notes-${id}`);
+  const current = notesEl ? notesEl.textContent : '';
+  row.querySelector('.entry-actions').innerHTML = `
+    <div style="margin-top:8px">
+      <textarea id="edit-${id}" style="width:100%;padding:8px;border:1px solid var(--teal);border-radius:6px;background:var(--surface);color:var(--text);font-size:0.82rem;min-height:60px;resize:vertical">${current}</textarea>
+      <div style="display:flex;gap:8px;margin-top:6px">
+        <button class="btn" style="flex:1;padding:7px;font-size:0.78rem;background:linear-gradient(135deg,#ea580c,#c2410c);color:white" onclick="saveEdit('${id}')">Save</button>
+        <button class="btn" style="flex:1;padding:7px;font-size:0.78rem;background:var(--surface2);color:var(--text-muted);border:1px solid var(--border)" onclick="renderEntries()">Cancel</button>
+      </div>
+    </div>`;
+}
+
+async function saveEdit(id) {
+  const newNotes = document.getElementById(`edit-${id}`).value.trim();
+  try {
+    // Delete old, re-add with new notes
+    const entries = await fetchEntries();
+    const entry = entries.find(e => String(e.id) === String(id));
+    if (!entry) { toast('Entry not found.', '#dc2626'); return; }
+    await apiDelete(id);
+    await apiPost({ ...entry, notes: newNotes });
+    _cache = null;
+    toast('✓ Notes updated!');
+    renderEntries();
+  } catch(e) { toast('Update failed. Try again.', '#dc2626'); }
 }
 
 async function getReportData(monthKey) {
