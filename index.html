@@ -428,7 +428,13 @@ async function renderReport() {
   const sel = document.getElementById('report-month');
   const cur = sel.value && ms.includes(sel.value) ? sel.value : ms[0];
   sel.innerHTML = ms.map(m => `<option value="${m}"${m===cur?' selected':''}>${mlabel(m)}</option>`).join('');
-  const { hrs, totalHrs, withNotes } = await getReportData(cur);
+  // Build report data directly from already-fetched entries
+  const filt = entries.filter(e => mk(e.date) === cur);
+  const hrs = {};
+  ALL_CATS.forEach(c => hrs[c.label] = 0);
+  filt.forEach(e => { if (hrs[e.category] !== undefined) hrs[e.category] += e.hours; });
+  const totalHrs = filt.reduce((s,e) => s + e.hours, 0);
+  const withNotes = filt.filter(e => e.notes).sort((a,b) => String(a.date).localeCompare(String(b.date)));
   document.getElementById('report-content').innerHTML = buildReportHTML(cur, hrs, totalHrs, withNotes);
 }
 
