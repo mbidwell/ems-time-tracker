@@ -315,7 +315,18 @@ function months(entries) {
   return [...s].sort().reverse();
 }
 function fmtDate(d) {
-  return new Date(String(d) + 'T12:00:00').toLocaleDateString('en-US', { weekday:'short', month:'short', day:'numeric', year:'numeric' });
+  const s = String(d).trim();
+  // Handle both YYYY-MM-DD and M/D/YYYY formats from Google Sheets
+  const parts = s.includes('/') ? s.split('/') : s.split('-');
+  let date;
+  if (s.includes('/')) {
+    // M/D/YYYY
+    date = new Date(parseInt(parts[2]), parseInt(parts[0])-1, parseInt(parts[1]));
+  } else {
+    // YYYY-MM-DD
+    date = new Date(parseInt(parts[0]), parseInt(parts[1])-1, parseInt(parts[2]));
+  }
+  return date.toLocaleDateString('en-US', { weekday:'short', month:'short', day:'numeric', year:'numeric' });
 }
 function showStatus(msg, err = false) {
   const el = document.getElementById('sync-status');
@@ -424,7 +435,7 @@ function buildReportHTML(monthKey, hrs, totalHrs, withNotes) {
   }).join('');
   const notesHTML = withNotes.length ? `
     <div class="notes-section"><h4>Activity Notes</h4>
-      ${withNotes.map(e => `<div class="note-item"><strong style="color:var(--text)">${new Date(String(e.date)+'T12:00:00').toLocaleDateString('en-US',{month:'short',day:'numeric'})} — ${e.category}:</strong> ${e.notes}</div>`).join('')}
+      ${withNotes.map(e => `<div class="note-item"><strong style="color:var(--text)">${parseDate(e.date).toLocaleDateString('en-US',{month:'short',day:'numeric'})} — ${e.category}:</strong> ${e.notes}</div>`).join('')}
     </div>` : '';
   return `
     <div style="margin-bottom:14px">
@@ -465,7 +476,7 @@ async function printReport() {
     return `<tr style="background:#eef2f7"><td><b>${s.group}</b></td><td align="right"><b>${(hrs[s.group]||0)>0?(hrs[s.group]).toFixed(2):'—'}</b></td></tr>`;
   }).join('');
   const notesHTML = withNotes.length ? `<p><b>Activity Notes</b></p>`
-    + withNotes.map(e => `<p style="padding-left:12px;border-left:3px solid #ccc;margin:4px 0;font-size:9.5pt"><b>${new Date(String(e.date)+'T12:00:00').toLocaleDateString('en-US',{month:'short',day:'numeric'})} — ${e.category}:</b> ${e.notes}</p>`).join('') : '';
+    + withNotes.map(e => `<p style="padding-left:12px;border-left:3px solid #ccc;margin:4px 0;font-size:9.5pt"><b>${parseDate(e.date).toLocaleDateString('en-US',{month:'short',day:'numeric'})} — ${e.category}:</b> ${e.notes}</p>`).join('') : '';
   const win = window.open('', '_blank');
   win.document.write(`<!DOCTYPE html><html><head><meta charset="utf-8"><title>Service Documentation Report</title>
   <style>body{font-family:Arial,sans-serif;margin:0.75in;color:#111;font-size:11pt}table{width:100%;border-collapse:collapse;margin-bottom:12px}th{background:#1a3a5c;color:white;padding:7px 8px;text-align:left}th:last-child{text-align:right}td{padding:5px 8px;border-bottom:1px solid #ddd}td:last-child{text-align:right}h2{color:#1a3a5c;margin-bottom:2px}h3{color:#1a3a5c;margin-top:0;margin-bottom:10px}.sig-line{border-top:1px solid #555;padding-top:3px;font-size:9pt;color:#555}@media print{body{margin:0.5in}}</style>
